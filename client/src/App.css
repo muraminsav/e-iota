@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  body {
+    @apply bg-gray-100 dark:bg-slate-800 text-black dark:text-white border-black border-4;
+  }
+  /* div {
+    @apply bg-white dark:bg-slate-800 text-black dark:text-white;
+  } */
+}
