@@ -1,21 +1,27 @@
-/* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from 'react';
-import io from 'socket.io-client';
+// import socket from '..App/';
 import JoinGame from './JoinGame';
+import { socket } from '../api/socket';
 import { usePlayerContext } from '../context/PlayerContext';
+import { useNavigate } from 'react-router-dom';
 
-export function GameRoom({ handelClick, Label }) {
+export function GameRoom() {
   const { state, dispatch } = usePlayerContext();
 
-  const [socketId, setSocketId] = useState();
+  const navigate = useNavigate();
+  const handelClick = () => {
+    dispatch({ type: 'TOGGLE_IN_GAME' });
+
+    navigate('/');
+  };
+  // const [socketId, setSocketId] = useState();
+
   // const [inGame, setInGame] = useState(false);
-  const socket = io('http://localhost:3000');
-  console.log(state);
+  // const socket = io('http://localhost:3000');
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log(socket.id);
-      setSocketId(socket.id);
-    });
+    dispatch({ type: 'UPDATE_SOCKET_ID', payload: socket.id });
+
+    console.log(state, 'in gameroom', socket.id);
   }, []);
   if (!state.inGame) {
     return <JoinGame />;
@@ -23,12 +29,14 @@ export function GameRoom({ handelClick, Label }) {
     return (
       <>
         <h1>GameRoom</h1>
-        <h2>player {socketId}</h2>
+        <h2>
+          player {state.name} ;{state.socketID}
+        </h2>
         <button
           onClick={() => handelClick()}
           className=" bg-grey-200 dark:bg-slate-800 dark:text-white m-2 p-3 border-2 rounded-lg  hover:bg-gray-300 dark:hover:bg-slate-700 "
         >
-          {Label}
+          Leave game
         </button>
       </>
     );

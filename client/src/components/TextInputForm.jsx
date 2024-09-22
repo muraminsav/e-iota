@@ -13,10 +13,11 @@ export function TextInputForm({
         {label}
         <input
           className="bg-gray-100 dark:bg-slate-800 dark:text-white; border-2 m-2 p-2 rounded-xl w-20"
-          maxLength={charLimit ? charLimit : false}
+          maxLength={charLimit ? charLimit : 10}
           type="text"
           value={getValue}
           onChange={(e) => setValue(e.target.value)}
+          required={true}
         />
       </label>
       <Button

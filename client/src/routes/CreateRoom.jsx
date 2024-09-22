@@ -2,38 +2,28 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { usePlayerContext } from '../context/PlayerContext';
+// import { usePlayerContext } from '../context/PlayerContext';
 import { Button } from '../components/Button';
-
+import { createRoom } from '../api/fetchApi';
+import { useLocation } from 'react-router-dom';
 export function CreateRoom({ label = 'CreateRoom' }) {
-  const { state, dispatch } = usePlayerContext();
+  // const { state, dispatch } = usePlayerContext();
+  const [roomId, setRoomId] = useState();
 
   const navigate = useNavigate();
-  const createRoom = async () => {
-    try {
-      console.log('creating room');
-      const response = await fetch('http://localhost:3000/create-room', {
-        method: 'POST',
-      });
-      const data = await response.json();
-      dispatch({ type: 'UPDATE_ROOM_ID', payload: data.roomId });
-
-      // Redirect to the new room
-      // navigate(`/${data.roomId}`);
-    } catch (error) {
-      console.error('Error creating room:', error);
-    }
-  };
+  const location = useLocation();
+  const message = location.state?.text;
   useEffect(() => {
-    createRoom();
+    createRoom(setRoomId);
   }, []);
   return (
     <>
       <h1>Create Room</h1>
-      <h2>id:{state.roomId || 'waiting....'}</h2>
+      <p>{message}</p>
+      <h2>id:{roomId || 'waiting....'}</h2>
       <Button
         label={label}
-        handelClick={() => state.roomId && navigate(`/${state.roomId}`)}
+        handelClick={() => roomId && navigate(`/${roomId}`)}
       />
       {/* <button
         onClick={() => state.roomId && navigate(`/${state.roomId}`)}

@@ -18,6 +18,12 @@ const playerReducer = (state, action) => {
         ...state,
         name: action.payload, // Assuming Player has a name property
       };
+    case 'UPDATE_SOCKET_ID':
+      // Return a new object with updated SOCKETid (ensuring immutability)
+      return {
+        ...state,
+        socketID: action.payload, // Assuming Player has a name property
+      };
     case 'UPDATE_ROOM_ID':
       // Return a new object with updated room id
       return {

@@ -1,4 +1,4 @@
-/* @tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 @layer base {
@@ -8,4 +8,4 @@
   /* div {
     @apply bg-white dark:bg-slate-800 text-black dark:text-white;
   } */
-/* } */
+}

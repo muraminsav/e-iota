@@ -58,7 +58,7 @@ class Player {
     score,
     hand,
     playedCards,
-    roomID,
+    roomId,
     darkMode = true,
     inGame = false
   ) {
@@ -68,7 +68,7 @@ class Player {
     this.score = score;
     this.hand = hand; // Array of Card
     this.playedCards = playedCards; // Array of Card
-    this.roomID = roomID;
+    this.roomId = roomId;
     this.darkMode = darkMode;
     this.inGame = inGame;
   }
