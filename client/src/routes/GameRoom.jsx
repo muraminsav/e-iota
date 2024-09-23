@@ -14,14 +14,9 @@ export function GameRoom() {
 
     navigate('/');
   };
-  // const [socketId, setSocketId] = useState();
 
-  // const [inGame, setInGame] = useState(false);
-  // const socket = io('http://localhost:3000');
   useEffect(() => {
     dispatch({ type: 'UPDATE_SOCKET_ID', payload: socket.id });
-
-    console.log(state, 'in gameroom', socket.id);
   }, []);
   if (!state.inGame) {
     return <JoinGame />;
@@ -37,6 +32,13 @@ export function GameRoom() {
           className=" bg-grey-200 dark:bg-slate-800 dark:text-white m-2 p-3 border-2 rounded-lg  hover:bg-gray-300 dark:hover:bg-slate-700 "
         >
           Leave game
+        </button>
+        <button
+          onClick={() => {
+            console.log(state);
+          }}
+        >
+          log state
         </button>
       </>
     );

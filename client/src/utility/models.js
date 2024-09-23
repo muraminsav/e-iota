@@ -54,7 +54,7 @@ class Player {
   constructor(
     name,
     isMyTurn,
-    socketID,
+    socketId,
     score,
     hand,
     playedCards,
@@ -64,7 +64,7 @@ class Player {
   ) {
     this.name = name;
     this.isMyTurn = isMyTurn;
-    this.socketID = socketID;
+    this.socketId = socketId;
     this.score = score;
     this.hand = hand; // Array of Card
     this.playedCards = playedCards; // Array of Card
@@ -72,11 +72,11 @@ class Player {
     this.darkMode = darkMode;
     this.inGame = inGame;
   }
-  getRoomID() {
+  getRoomId() {
     return this.roomID;
   }
   setRoomId(roomId) {
-    this.roomID = roomId;
+    this.roomId = roomId;
   }
   getName() {
     return this.name;
@@ -94,12 +94,12 @@ class Player {
     this.isMyTurn = isMyTurn;
   }
 
-  getSocketID() {
-    return this.socketID;
+  getSocketId() {
+    return this.socketId;
   }
 
-  setSocketID(socketID) {
-    this.socketID = socketID;
+  setSocketId(socketId) {
+    this.socketId = socketId;
   }
 
   getScore() {
