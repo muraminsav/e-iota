@@ -1,7 +1,7 @@
-import cors from 'cors';
-import express from 'express';
-import http from 'http';
-import { Server } from 'socket.io';
+import cors from "cors";
+import express from "express";
+import http from "http";
+import { Server } from "socket.io";
 // import { server } from './host';
 
 const app = express();
@@ -72,13 +72,9 @@ const data = {
   name: "me",
   age: 12,
 };
-<<<<<<< HEAD
+
 app.get("/", (req, res) => {
-  res.status(200).send({ data });
-=======
-app.get('/', (req, res) => {
-  res.status(200).send('server running');
->>>>>>> 9b8947af08cf4de6e7c6cd9d4e662e698dfe3aa1
+  res.status(200).send("server running");
 });
 
 // Socket.IO connection
@@ -88,11 +84,8 @@ io.on("connect", (socket) => {
   console.log(io.sockets.adapter.rooms);
 
   // Join room event
-<<<<<<< HEAD
-  socket.on("join-room", (roomId) => {
-=======
-  socket.on('join-room', (roomId, name) => {
->>>>>>> 9b8947af08cf4de6e7c6cd9d4e662e698dfe3aa1
+
+  socket.on("join-room", (roomId, name) => {
     socket.join(roomId);
     const playerId = socket.id;
     const pName = {};
@@ -100,7 +93,7 @@ io.on("connect", (socket) => {
     rooms.set(roomId, {
       ...rooms.get(roomId),
       id: roomId,
-      players: [...rooms.get(roomId)['players'], pName],
+      players: [...rooms.get(roomId)["players"], pName],
     });
     console.log(`User joined room: ${roomId} in  ${io.sockets.adapter.rooms}`);
     console.log("user socket id: ", socket.id);
