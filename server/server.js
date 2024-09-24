@@ -5,17 +5,16 @@ import { Server } from "socket.io";
 // import { server } from './host';
 
 const app = express();
-const origin = {};
+
+const origin = {
+  origin: "https://nxzf7n-5173.csb.app",
+  methods: ["POST", "GET"],
+};
 app.use(express.json());
-app.use(
-  cors({ origin: "https://nxzf7n-5173.csb.app", methods: ["POST", "GET"] })
-);
+app.use(cors(origin));
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: "https://nxzf7n-5173.csb.app",
-    methods: ["POST", "GET"],
-  },
+  cors: origin,
 });
 
 const rooms = new Map();
@@ -35,10 +34,11 @@ function generateRoomId() {
 }
 
 // Endpoint to create a new room and return its ID using POST request
-app.get("/create-room", (req, res) => {
+app.post("/create-room", (req, res) => {
   const roomId = generateRoomId();
   rooms.set(`${roomId}`, {
-    private: false,
+    id: "",
+    isOpen: false,
     players: [],
     boardState: [], // Initial empty board or specific game state
     currentTurn: null, // Player ID or index indicating whose turn it is
@@ -48,8 +48,16 @@ app.get("/create-room", (req, res) => {
   res.json({ roomId });
 });
 
+app.get("/list-rooms", (req, res) => {
+  const roomList = [];
+  rooms.forEach((values) => {
+    if (values.isOpen) roomList.push(values.id);
+  });
+  res.status(200).json(roomList);
+});
+
 app.get("/find-room/:id", (req, res) => {
-  const roomId = req.params.id.substring(1);
+  const roomId = req.params.id;
   console.log(roomId);
   const room = rooms.has(roomId);
   console.log("search for ", roomId, room);
@@ -67,11 +75,6 @@ app.get("/find-room/:id", (req, res) => {
     });
   }
 });
-
-const data = {
-  name: "me",
-  age: 12,
-};
 
 app.get("/", (req, res) => {
   res.status(200).send("server running");
@@ -94,9 +97,12 @@ io.on("connect", (socket) => {
       ...rooms.get(roomId),
       id: roomId,
       players: [...rooms.get(roomId)["players"], pName],
+      isOpen: true,
     });
-    console.log(`User joined room: ${roomId} in  ${io.sockets.adapter.rooms}`);
-    console.log("user socket id: ", socket.id);
+    console.log(
+      `User ${socket.id} joined room: ${roomId} in  ${io.sockets.adapter.rooms}`
+    );
+
     console.log(io.sockets.adapter.rooms);
     console.dir(rooms, { depth: null });
   });

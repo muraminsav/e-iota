@@ -1,9 +1,11 @@
+const server = "https://nxzf7n-3000.csb.app";
+
 const createRoom = async (setter) => {
   const setRoomId = setter;
   try {
     console.log("creating room");
-    const response = await fetch("https://nxzf7n-3000.csb.app/create-room", {
-      method: "GET",
+    const response = await fetch(`${server}/create-room`, {
+      method: "POST",
     });
     const data = await response.json();
     setRoomId(data.roomId);
@@ -16,28 +18,26 @@ const findRoom = async (roomId) => {
   console.log(roomId, "fro fetchrequest");
   try {
     console.log("find room", roomId);
-    const response = await fetch(
-      `https://nxzf7n-3000.csb.app/find-room/:${roomId}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch(`${server}/find-room/${roomId}`, {
+      method: "GET",
+    });
     const data = await response.json();
     return data.room ? true : false;
   } catch (error) {
     console.error("Error finding room:", error);
   }
 };
-const listRooms = async () => {
+const listRooms = async (setter) => {
   try {
-    const response = await fetch(`http://localhost:3000/list-rooms`, {
+    const response = await fetch(`${server}/list-rooms`, {
       method: "GET",
     });
     const data = await response.json();
-    return data.rooms;
+    console.log(data);
+    setter(data.roomList);
   } catch (error) {
     console.error("Error listing room:", error);
   }
 };
 
-export { createRoom, findRoom, listRooms };
+export { createRoom, findRoom, listRooms, server };

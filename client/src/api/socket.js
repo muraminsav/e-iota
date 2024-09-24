@@ -1,6 +1,7 @@
 import io from "socket.io-client";
+import { server } from "./fetchApi";
 
-const socket = io("http://localhost:3000");
+const socket = io(server);
 // socket.on('connect', () => {
 //   console.log(socket.id, ' connected to server');
 // });
