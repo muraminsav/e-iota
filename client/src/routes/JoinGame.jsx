@@ -23,21 +23,30 @@ export default function JoinGame() {
   return (
     <>
       <div>JoinGame </div>
-      <div>id: {socket.id}</div>
+      <div>
+        id: {socket.id} room:{state.roomId}
+      </div>
       <h2> {' ' + playerName}</h2>
-      <TextInputForm
-        label={'playerName'}
-        handleSubmit={() => {
-          dispatch({ type: 'UPDATE_SOCKET_ID', payload: socket.id });
-          dispatch({ type: 'TOGGLE_IN_GAME' });
-          dispatch({ type: 'UPDATE_PLAYER_NAME', payload: playerName });
-          console.log('all', state, localStorage.getItem('player'));
-          console.log(state.roomID);
-          socket.emit('join-room', state.roomId);
-        }}
-        getValue={playerName}
-        setValue={setPlayerName}
-      />
+      {socket.id ? (
+        <>
+          <TextInputForm
+            label={'playerName'}
+            handleSubmit={() => {
+              dispatch({ type: 'UPDATE_SOCKET_ID', payload: socket.id });
+              dispatch({ type: 'TOGGLE_IN_GAME' });
+              dispatch({ type: 'UPDATE_PLAYER_NAME', payload: playerName });
+              console.log('all', state);
+              socket.emit('join-room', state.roomId, playerName);
+            }}
+            getValue={playerName}
+            setValue={setPlayerName}
+          />
+        </>
+      ) : (
+        <>
+          <p>Waiting server response</p>
+        </>
+      )}
     </>
   );
 }

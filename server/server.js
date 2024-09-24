@@ -1,7 +1,8 @@
-import cors from "cors";
-import express from "express";
-import http from "http";
-import { Server } from "socket.io";
+import cors from 'cors';
+import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
+// import { server } from './host';
 
 const app = express();
 const origin = {};
@@ -37,6 +38,7 @@ function generateRoomId() {
 app.get("/create-room", (req, res) => {
   const roomId = generateRoomId();
   rooms.set(`${roomId}`, {
+    private: false,
     players: [],
     boardState: [], // Initial empty board or specific game state
     currentTurn: null, // Player ID or index indicating whose turn it is
@@ -70,8 +72,13 @@ const data = {
   name: "me",
   age: 12,
 };
+<<<<<<< HEAD
 app.get("/", (req, res) => {
   res.status(200).send({ data });
+=======
+app.get('/', (req, res) => {
+  res.status(200).send('server running');
+>>>>>>> 9b8947af08cf4de6e7c6cd9d4e662e698dfe3aa1
 });
 
 // Socket.IO connection
@@ -81,12 +88,24 @@ io.on("connect", (socket) => {
   console.log(io.sockets.adapter.rooms);
 
   // Join room event
+<<<<<<< HEAD
   socket.on("join-room", (roomId) => {
+=======
+  socket.on('join-room', (roomId, name) => {
+>>>>>>> 9b8947af08cf4de6e7c6cd9d4e662e698dfe3aa1
     socket.join(roomId);
-    // console.log(roomId);
+    const playerId = socket.id;
+    const pName = {};
+    pName[playerId] = name;
+    rooms.set(roomId, {
+      ...rooms.get(roomId),
+      id: roomId,
+      players: [...rooms.get(roomId)['players'], pName],
+    });
     console.log(`User joined room: ${roomId} in  ${io.sockets.adapter.rooms}`);
     console.log("user socket id: ", socket.id);
     console.log(io.sockets.adapter.rooms);
+    console.dir(rooms, { depth: null });
   });
 
   // Handle disconnection
