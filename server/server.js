@@ -1,14 +1,15 @@
-import cors from "cors";
-import express from "express";
-import http from "http";
-import { Server } from "socket.io";
-// import { server } from './host';
+import cors from 'cors';
+import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
 
 const app = express();
+const client = 'http://localhost:5173';
+// const client = "https://nxzf7n-5173.csb.app"
 
 const origin = {
-  origin: "https://nxzf7n-5173.csb.app",
-  methods: ["POST", "GET"],
+  origin: client,
+  methods: ['POST', 'GET'],
 };
 app.use(express.json());
 app.use(cors(origin));
@@ -19,11 +20,14 @@ const io = new Server(server, {
 
 const rooms = new Map();
 rooms.set(`ASDA`, {
+  id: '',
+  isOpen: false,
   players: [],
   boardState: [], // Initial empty board or specific game state
   currentTurn: null, // Player ID or index indicating whose turn it is
   scores: {}, // Player scores
 });
+
 // Helper function to generate a random 4-character room ID
 function generateRoomId() {
   const newRoomId = Math.random().toString(36).substr(2, 4).toUpperCase();
@@ -34,21 +38,21 @@ function generateRoomId() {
 }
 
 // Endpoint to create a new room and return its ID using POST request
-app.post("/create-room", (req, res) => {
+app.post('/create-room', (req, res) => {
   const roomId = generateRoomId();
   rooms.set(`${roomId}`, {
-    id: "",
+    id: '',
     isOpen: false,
     players: [],
     boardState: [], // Initial empty board or specific game state
     currentTurn: null, // Player ID or index indicating whose turn it is
     scores: {}, // Player scores
   });
-  console.log("!!!!!!!!!!!!!!!1", roomId, "from create room endpoint");
+  console.log('!!!!!!!!!!!!!!!1', roomId, 'from create room endpoint');
   res.json({ roomId });
 });
 
-app.get("/list-rooms", (req, res) => {
+app.get('/list-rooms', (req, res) => {
   const roomList = [];
   rooms.forEach((values) => {
     if (values.isOpen) roomList.push(values.id);
@@ -56,11 +60,11 @@ app.get("/list-rooms", (req, res) => {
   res.status(200).json(roomList);
 });
 
-app.get("/find-room/:id", (req, res) => {
+app.get('/find-room/:id', (req, res) => {
   const roomId = req.params.id;
   console.log(roomId);
   const room = rooms.has(roomId);
-  console.log("search for ", roomId, room);
+  console.log('search for ', roomId, room);
 
   if (room) {
     res.status(200).json({
@@ -76,19 +80,19 @@ app.get("/find-room/:id", (req, res) => {
   }
 });
 
-app.get("/", (req, res) => {
-  res.status(200).send("server running");
+app.get('/', (req, res) => {
+  res.status(200).send('server running');
 });
 
 // Socket.IO connection
-io.on("connect", (socket) => {
-  console.log("a user connected");
+io.on('connect', (socket) => {
+  console.log('a user connected');
   console.log(rooms);
   console.log(io.sockets.adapter.rooms);
 
   // Join room event
 
-  socket.on("join-room", (roomId, name) => {
+  socket.on('join-room', (roomId, name) => {
     socket.join(roomId);
     const playerId = socket.id;
     const pName = {};
@@ -96,7 +100,7 @@ io.on("connect", (socket) => {
     rooms.set(roomId, {
       ...rooms.get(roomId),
       id: roomId,
-      players: [...rooms.get(roomId)["players"], pName],
+      players: [...rooms.get(roomId)['players'], pName],
       isOpen: true,
     });
     console.log(
@@ -108,8 +112,8 @@ io.on("connect", (socket) => {
   });
 
   // Handle disconnection
-  socket.on("disconnect", () => {
-    console.log(socket.id, " user disconnected");
+  socket.on('disconnect', () => {
+    console.log(socket.id, ' user disconnected');
   });
 });
 
@@ -118,5 +122,5 @@ server.listen(3000, (error) => {
     throw new Error(error);
   }
 
-  console.log("Backend is running!!");
+  console.log('Backend is running!!');
 });
