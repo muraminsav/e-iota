@@ -9,13 +9,14 @@ import { useLocation } from 'react-router-dom';
 export function CreateRoom({ label = 'CreateRoom' }) {
   // const { state, dispatch } = usePlayerContext();
   const [roomId, setRoomId] = useState();
+  const [aa,cc]=useState("")
 
   const navigate = useNavigate();
   const location = useLocation();
   const message = location.state?.text;
   useEffect(() => {
     createRoom(setRoomId);
-  }, []);
+  },[aa,cc]);
   return (
     <>
       <h1>Create Room</h1>
