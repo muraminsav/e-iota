@@ -59,7 +59,7 @@ class Player {
     hand,
     playedCards,
     roomId,
-    darkMode = true,
+    darkMode = false,
     inGame = false
   ) {
     this.name = name;

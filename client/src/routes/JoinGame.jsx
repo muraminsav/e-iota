@@ -14,10 +14,10 @@ export default function JoinGame() {
   useEffect(() => {
     findRoom(id.roomID).then((respond) => {
       console.log(respond, "joinGame find respond");
-      const message = { text: "Room Id not found, create new room!" };
-      respond
+      const message = { text: respond.message };
+      respond.success
         ? dispatch({ type: "UPDATE_ROOM_ID", payload: id.roomID })
-        : navigate("/create", { state: message });
+        : navigate("/create", { state: message })
     });
   }, []);
   return (

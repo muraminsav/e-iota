@@ -4,8 +4,8 @@ import http from 'http';
 import { Server } from 'socket.io';
 
 const app = express();
-const client = 'http://localhost:5173';
-// const client = "https://nxzf7n-5173.csb.app"
+// const client = 'http://localhost:5173';
+const client = "https://nxzf7n-5173.csb.app"
 
 const origin = {
   origin: client,
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cors(origin));
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: origin,
+  cors: origin
 });
 
 const rooms = new Map();
@@ -55,7 +55,7 @@ app.post('/create-room', (req, res) => {
 app.get('/list-rooms', (req, res) => {
   const roomList = [];
   rooms.forEach((values) => {
-    if (values.isOpen) roomList.push(values.id);
+    if (values.isOpen) roomList.push({id:values.id, players:values.players});
   });
   res.status(200).json(roomList);
 });
@@ -63,19 +63,24 @@ app.get('/list-rooms', (req, res) => {
 app.get('/find-room/:id', (req, res) => {
   const roomId = req.params.id;
   console.log(roomId);
-  const room = rooms.has(roomId);
+  const room = rooms.get(roomId);
   console.log('search for ', roomId, room);
 
-  if (room) {
+if( !room) {
+  res.status(404).json({
+    success: false,
+    message: `Room ${roomId} not found`,
+  });}
+  else if (room.players?.length === 4) {
+    res.status(203).json({
+      success: false,
+      message: `Room ${roomId} is full`,
+    });
+  }else {
     res.status(200).json({
       success: true,
-      message: `Room ${roomId} found`,
+      message: `Player joined to ${roomId} `,
       room,
-    });
-  } else {
-    res.status(404).json({
-      success: false,
-      message: `Room ${roomId} not found`,
     });
   }
 });
@@ -93,19 +98,22 @@ io.on('connect', (socket) => {
   // Join room event
 
   socket.on('join-room', (roomId, name) => {
-    socket.join(roomId);
-    const playerId = socket.id;
-    const pName = {};
-    pName[playerId] = name;
-    rooms.set(roomId, {
+    const roomToJoin = rooms.get(roomId)
+    if (roomToJoin.players.length === 4) {
+      return socket.emit("Error", {message:"foom is full"})}
+      else { socket.join(roomId);
+        const playerId = socket.id;
+        const pName = {};
+       pName[playerId] = name;
+       rooms.set(roomId, {
       ...rooms.get(roomId),
       id: roomId,
       players: [...rooms.get(roomId)['players'], pName],
       isOpen: true,
     });
-    console.log(
+       console.log(
       `User ${socket.id} joined room: ${roomId} in  ${io.sockets.adapter.rooms}`
-    );
+    );}
 
     console.log(io.sockets.adapter.rooms);
     console.dir(rooms, { depth: null });

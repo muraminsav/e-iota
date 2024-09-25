@@ -1,5 +1,5 @@
-// const server = "https://nxzf7n-3000.csb.app";
-const server = 'http://localhost:3000';
+const server = "https://nxzf7n-3000.csb.app";
+// const server = 'http://localhost:3000';
 
 const createRoom = async (setter) => {
   const setRoomId = setter;
@@ -23,7 +23,7 @@ const findRoom = async (roomId) => {
       method: 'GET',
     });
     const data = await response.json();
-    return data.room ? true : false;
+    return data;
   } catch (error) {
     console.error('Error finding room:', error);
   }
