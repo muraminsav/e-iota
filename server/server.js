@@ -99,9 +99,7 @@ io.on('connect', (socket) => {
 
   socket.on('join-room', (roomId, name) => {
     const roomToJoin = rooms.get(roomId)
-    if (roomToJoin.players.length === 4) {
-      return socket.emit("Error", {message:"foom is full"})}
-      else { socket.join(roomId);
+      socket.join(roomId);
         const playerId = socket.id;
         const pName = {};
        pName[playerId] = name;
@@ -113,11 +111,25 @@ io.on('connect', (socket) => {
     });
        console.log(
       `User ${socket.id} joined room: ${roomId} in  ${io.sockets.adapter.rooms}`
-    );}
+    );
 
     console.log(io.sockets.adapter.rooms);
     console.dir(rooms, { depth: null });
   });
+  
+  //leave room event
+  socket.on("leave-room", (roomId)=>{
+    const gameRoom = rooms.get(roomId)
+    console.log(gameRoom)
+    const filteredPlayers= gameRoom["players"]?.filter((player)=>
+     Object.keys(player)[0] != socket.id)
+    rooms.set(roomId, {
+      ...rooms.get(roomId),  
+      players: filteredPlayers,
+    });
+    console.log(rooms)
+    
+  })
 
   // Handle disconnection
   socket.on('disconnect', () => {

@@ -11,7 +11,7 @@ export function GameRoom() {
   const navigate = useNavigate();
   const handelClick = () => {
     dispatch({ type: 'TOGGLE_IN_GAME' });
-
+    socket.emit("leave-room", state.roomId)
     navigate('/');
   };
 
