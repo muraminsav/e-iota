@@ -12,12 +12,12 @@ export default function JoinGame() {
   const { state, dispatch } = usePlayerContext();
   const id = useParams();
   useEffect(() => {
-    findRoom(id.roomID).then((respond) => {
+    findRoom(id.roomId).then((respond) => {
       console.log(respond, "joinGame find respond");
       const message = { text: respond.message };
       respond.success
-        ? dispatch({ type: "UPDATE_ROOM_ID", payload: id.roomID })
-        : navigate("/create", { state: message })
+        ? dispatch({ type: "UPDATE_ROOM_ID", payload: id.roomId })
+        : navigate("/create", { state: message });
     });
   }, []);
   return (

@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
 // GameContext.js
-import { createContext, useReducer, useContext } from 'react';
-import { Card, Player, Game, Session } from '../utility/models'; // Adjust import as necessary
+import { createContext, useReducer, useContext } from "react";
+import { Card, Player, Game, Session } from "../utility/models"; // Adjust import as necessary
 const players = [];
-const roomId = '';
+const roomId = "";
 const deck = [];
 const grid = {
   onTable: [
     [[false][true][false]],
-    [[true]['anchor'][true]],
+    [[true]["anchor"][true]],
     [[false][true][false]],
   ],
   gridGraph: {},
@@ -21,24 +21,24 @@ const GameContext = createContext();
 
 const gameReducer = (state, action) => {
   switch (action.type) {
-    case 'UPDATE_PLAYERS':
+    case "UPDATE_PLAYERS":
       state.setPlayers(action.payload);
       return {
         ...state,
       };
-    case 'ADD_PLAYER':
+    case "ADD_PLAYER":
       return {
         ...state,
         players: [...state.players, action.payload],
       };
-    case 'REMOVE_PLAYER':
+    case "REMOVE_PLAYER":
       return {
         ...state,
         players: state.players.filter((player) => {
-          player.getSocketID() != action.payload;
+          player.getSocketId() != action.payload;
         }),
       };
-    case 'UPDATE_ROOM_ID':
+    case "UPDATE_ROOM_ID":
       return {
         ...state,
         roomId: state.action,

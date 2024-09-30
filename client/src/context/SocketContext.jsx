@@ -1,19 +1,19 @@
 /* eslint-disable react/prop-types */
 
-import { createContext, useReducer, useContext } from 'react';
-import { Game } from '../utility/models'; // Adjust import as necessary
-import io from 'socket.io-client';
+import { createContext, useReducer, useContext } from "react";
+import { Game } from "../utility/models"; // Adjust import as necessary
+import io from "socket.io-client";
 
 // Initialize socket connection
-const socket = io('http://localhost:3001');
+// const socket = io('http://localhost:3001');
 
 const players = [];
-const roomId = '';
+const roomId = "";
 const deck = [];
 const grid = {
   onTable: [
     [[false][true][false]],
-    [[true]['anchor'][true]],
+    [[true]["anchor"][true]],
     [[false][true][false]],
   ],
   gridGraph: {},
@@ -26,24 +26,24 @@ const SocketContext = createContext();
 
 const socketReducer = (state, action) => {
   switch (action.type) {
-    case 'UPDATE_PLAYERS':
+    case "UPDATE_PLAYERS":
       state.setPlayers(action.payload);
       return {
         ...state,
       };
-    case 'ADD_PLAYER':
+    case "ADD_PLAYER":
       return {
         ...state,
         players: [...state.players, action.payload],
       };
-    case 'REMOVE_PLAYER':
+    case "REMOVE_PLAYER":
       return {
         ...state,
         players: state.players.filter((player) => {
-          player.getSocketID() != action.payload;
+          player.getSocketId() != action.payload;
         }),
       };
-    case 'UPDATE_ROOM_ID':
+    case "UPDATE_ROOM_ID":
       return {
         ...state,
         roomId: state.action,
@@ -56,17 +56,17 @@ const socketReducer = (state, action) => {
 export const SocketProvider = ({ children }) => {
   const [state, dispatch] = useReducer(socketReducer, initialGameState);
   useEffect(() => {
-    socket.on('gridUpdate', (newGrid) => {
-      dispatch({ type: 'SET_GRID', payload: newGrid });
+    socket.on("gridUpdate", (newGrid) => {
+      dispatch({ type: "SET_GRID", payload: newGrid });
     });
 
-    socket.on('error', (errorMessage) => {
-      dispatch({ type: 'SET_ERROR', payload: errorMessage });
+    socket.on("error", (errorMessage) => {
+      dispatch({ type: "SET_ERROR", payload: errorMessage });
     });
 
     return () => {
-      socket.off('gridUpdate');
-      socket.off('error');
+      socket.off("gridUpdate");
+      socket.off("error");
     };
   }, []);
   return (
