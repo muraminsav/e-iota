@@ -56,16 +56,34 @@ app.get("/list-rooms", (req, res) => {
   const roomList = [];
   rooms.forEach((values) => {
     if (values.isOpen)
-      roomList.push({ id: values.id, players: values.players });
+      roomList.push({ id: values.id, players: values.players.length });
   });
   res.status(200).json(roomList);
 });
 
+app.get("/list-player-in-room/:id", (req, res) => {
+  const roomId = req.params.id;
+  const playerList = [];
+  const room = rooms.get(roomId);
+  console.log("roomId:", roomId);
+  console.log("room", room);
+  room["players"].forEach((values) => {
+    console.log("values:", Object.values(values));
+    playerList.push(Object.values(values)[0]);
+  });
+  const playerArray = [];
+  playerList.forEach((values) => {
+    console.log(values);
+    playerArray.push(values.name);
+  });
+  console.log(playerList, "PlayerList..", playerArray);
+  res.status(200).json(playerList);
+});
+
 app.get("/find-room/:id", (req, res) => {
   const roomId = req.params.id;
-  console.log(roomId);
+
   const room = rooms.get(roomId);
-  console.log("search for ", roomId, room);
 
   if (!room) {
     res.status(404).json({
@@ -103,7 +121,7 @@ io.on("connect", (socket) => {
     socket.join(roomId);
     const playerId = socket.id;
     const pName = {};
-    pName[playerId] = name;
+    pName[playerId] = { name: name };
     rooms.set(roomId, {
       ...rooms.get(roomId),
       id: roomId,
