@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function JoinGame() {
   const navigate = useNavigate();
-  const [playerName, setPlayerName] = useState("");
   const { state, dispatch } = usePlayerContext();
+  const [playerName, setPlayerName] = useState(state.name || "");
   const id = useParams();
   useEffect(() => {
     findRoom(id.roomId).then((respond) => {

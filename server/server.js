@@ -140,7 +140,7 @@ io.on("connect", (socket) => {
   socket.on("leave-room", (roomId) => {
     const gameRoom = rooms.get(roomId);
     console.log(gameRoom);
-    const filteredPlayers = gameRoom["players"].filter(
+    const filteredPlayers = gameRoom && gameRoom["players"].filter(
       (player) => Object.keys(player)[0] != socket.id
     );
     rooms.set(roomId, {
@@ -152,7 +152,7 @@ io.on("connect", (socket) => {
 
   // Handle disconnection
   socket.on("disconnect", () => {
-    console.log(socket.id, " user disconnected");
+    console.log(socket.id, " user  disconnected");
   });
 });
 

@@ -3,6 +3,7 @@
 import { createContext, useReducer, useContext } from "react";
 import { Game } from "../utility/models"; // Adjust import as necessary
 import io from "socket.io-client";
+import { server } from "./fetchApi";
 
 // Initialize socket connection
 // const socket = io('http://localhost:3001');
@@ -18,19 +19,15 @@ const grid = {
   ],
   gridGraph: {},
 };
-const initialGameState = {
-  session: new Game(players, roomId, deck, grid),
-};
+const socket = io(server);
 
 const SocketContext = createContext();
 
-const socketReducer = (state, action) => {
+const socketReducer = (socket, action) => {
   switch (action.type) {
     case "UPDATE_PLAYERS":
-      state.setPlayers(action.payload);
-      return {
-        ...state,
-      };
+       socket.io("connect")
+      
     case "ADD_PLAYER":
       return {
         ...state,

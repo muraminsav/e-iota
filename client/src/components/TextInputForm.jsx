@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import { Button } from './Button';
+import { useEffect, useState } from "react";
+import { Button } from "./Button";
 export function TextInputForm({
   label,
   handleSubmit,
@@ -21,19 +22,10 @@ export function TextInputForm({
         />
       </label>
       <Button
-        label={'Go!'}
+        label={"Join"}
         disabled={getValue.length === charLimit ? false : true}
         charLimit={charLimit}
       />
-      {/* <input
-        type="submit"
-        disabled={getValue.length === charLimit ? false : true}
-        value={
-          getValue.length === charLimit
-            ? ' GO!'
-            : ` ${charLimit - getValue.length}`
-        }
-      /> */}
     </form>
   );
 }

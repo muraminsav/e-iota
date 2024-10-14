@@ -36,6 +36,10 @@ export function GameRoom() {
         <button
           onClick={() => {
             console.log(state);
+            fetch(
+              `https://nxzf7n-3000.csb.app/list-player-in-room/${state.roomId}`,
+              { method: "GET" }
+            );
           }}
         >
           log state
