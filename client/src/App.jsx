@@ -21,27 +21,15 @@ function App() {
   return (
     <>
       <PlayerProvider>
-        <Navigation darkMode={darkMode} setDarkMode={setDarkMode} />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/create"
-            element={
-              <SocketProvider>
-                <CreateRoom />
-              </SocketProvider>
-            }
-          />
-          <Route
-            path="/:roomId"
-            element={
-              <SocketProvider>
-                <GameRoom />
-              </SocketProvider>
-            }
-          />
-          <Route path="/lobby" element={<Lobby />} />
-        </Routes>
+        <SocketProvider>
+          <Navigation darkMode={darkMode} setDarkMode={setDarkMode} />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/create" element={<CreateRoom />} />
+            <Route path="/:roomId" element={<GameRoom />} />
+            <Route path="/lobby" element={<Lobby />} />
+          </Routes>
+        </SocketProvider>
       </PlayerProvider>
     </>
   );

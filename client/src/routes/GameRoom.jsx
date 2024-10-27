@@ -5,6 +5,7 @@ import { SocketContext } from "../context/SocketContext";
 import { server } from "../api/fetchApi";
 import { usePlayerContext } from "../context/PlayerContext";
 import { useNavigate } from "react-router-dom";
+import MessageSelector from "../components/MessageSelector";
 
 export function GameRoom() {
   const { state, dispatch } = usePlayerContext();
@@ -16,6 +17,7 @@ export function GameRoom() {
 
   const handelClick = () => {
     dispatch({ type: "TOGGLE_IN_GAME" });
+    dispatch({ type: "UPDATE_ROOM_ID", payload: null });
     socket.emit("leave-room", state.roomId);
     navigate("/");
   };
@@ -49,6 +51,7 @@ export function GameRoom() {
         >
           log state
         </button>
+        <MessageSelector />
       </>
     );
 }

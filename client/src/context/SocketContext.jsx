@@ -4,6 +4,7 @@ import { createContext, useReducer, useContext, useEffect } from "react";
 import io from "socket.io-client";
 import { server } from "../api/fetchApi";
 import { socket } from "../api/socket";
+import { usePlayerContext } from "./PlayerContext";
 
 export const SocketContext = createContext();
 
@@ -31,7 +32,7 @@ const reducer = (state, action) => {
 
 export const SocketProvider = ({ children }) => {
   const [socketState, dispatch] = useReducer(reducer, initialState);
-
+  const userDispatch = usePlayerContext().dispatch;
   useEffect(() => {
     // Connect to the server on initial load
     const socket = io(server, {
@@ -41,9 +42,14 @@ export const SocketProvider = ({ children }) => {
     socket.on("connect", () => {
       console.log("Socket connected:", socket.id);
       dispatch({ type: "CONNECT_SOCKET", payload: socket });
+      userDispatch({
+        type: "UPDATE_SOCKET_ID",
+        payload: socket.id,
+      });
+      console.log(userDispatch);
     });
 
-    socket.on("authenticated", (data) => {
+    socket.on("reconnect", (data) => {
       if (data.success) {
         console.log("User authenticated:", data);
         dispatch({ type: "SET_AUTHENTICATED_USER", payload: data });

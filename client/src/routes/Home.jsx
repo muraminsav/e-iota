@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/Button";
 import { TextInputForm } from "../components/TextInputForm";
@@ -10,6 +10,9 @@ export function Home() {
   const [displayForm, setDisplayForm] = useState(false);
 
   const navigate = useNavigate();
+  useEffect(() => {
+    if (state.inGame) navigate(`/${gameCode}`);
+  }, [state]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
