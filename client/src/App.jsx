@@ -7,6 +7,7 @@ import { Lobby } from "./routes/Lobby";
 import { Home } from "./routes/Home";
 import useDarkMode from "./utility/useDarkMode";
 import { PlayerProvider } from "./context/PlayerContext";
+import { SocketProvider } from "./context/SocketContext";
 import Navigation from "./components/Navigation";
 
 function App() {
@@ -23,8 +24,22 @@ function App() {
         <Navigation darkMode={darkMode} setDarkMode={setDarkMode} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/create" element={<CreateRoom />} />
-          <Route path="/:roomId" element={<GameRoom />} />
+          <Route
+            path="/create"
+            element={
+              <SocketProvider>
+                <CreateRoom />
+              </SocketProvider>
+            }
+          />
+          <Route
+            path="/:roomId"
+            element={
+              <SocketProvider>
+                <GameRoom />
+              </SocketProvider>
+            }
+          />
           <Route path="/lobby" element={<Lobby />} />
         </Routes>
       </PlayerProvider>

@@ -1,4 +1,5 @@
 // Card
+import { v4 as uuidv4 } from "uuid";
 class Card {
   constructor(id, inHand, coordinate, face, neighbors) {
     this.id = id;
@@ -70,7 +71,8 @@ class Player {
     this.playedCards = playedCards; // Array of Card
     this.roomId = roomId;
     this.darkMode = darkMode;
-    this.inGame = inGame;
+    this.inGame = false;
+    this.playerId = uuidv4();
   }
   getRoomId() {
     return this.roomID;

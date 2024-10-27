@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 // import socket from '..App/';
 import JoinGame from "./JoinGame";
-import { socket } from "../api/socket";
+import { SocketContext } from "../context/SocketContext";
+import { server } from "../api/fetchApi";
 import { usePlayerContext } from "../context/PlayerContext";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +10,10 @@ export function GameRoom() {
   const { state, dispatch } = usePlayerContext();
 
   const navigate = useNavigate();
+
+  const { socketState } = useContext(SocketContext);
+  const { socket, isAuthenticated, user } = socketState;
+
   const handelClick = () => {
     dispatch({ type: "TOGGLE_IN_GAME" });
     socket.emit("leave-room", state.roomId);
@@ -18,6 +23,7 @@ export function GameRoom() {
   useEffect(() => {
     dispatch({ type: "UPDATE_SOCKET_ID", payload: socket.id });
   }, []);
+
   if (!state.inGame) {
     return <JoinGame />;
   } else
@@ -36,10 +42,9 @@ export function GameRoom() {
         <button
           onClick={() => {
             console.log(state);
-            fetch(
-              `https://nxzf7n-3000.csb.app/list-player-in-room/${state.roomId}`,
-              { method: "GET" }
-            );
+            fetch(`${server}/list-player-in-room/${state.roomId}`, {
+              method: "GET",
+            });
           }}
         >
           log state

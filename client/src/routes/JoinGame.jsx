@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { TextInputForm } from "../components/TextInputForm";
 import { usePlayerContext } from "../context/PlayerContext";
-import { socket } from "../api/socket";
+import { SocketContext } from "../context/SocketContext";
 import { useParams } from "react-router-dom";
 import { findRoom } from "../api/fetchApi";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,10 @@ import { useNavigate } from "react-router-dom";
 export default function JoinGame() {
   const navigate = useNavigate();
   const { state, dispatch } = usePlayerContext();
+
+  const { socketState } = useContext(SocketContext);
+  const { socket, isAuthenticated, user } = socketState;
+
   const [playerName, setPlayerName] = useState(state.name || "");
   const id = useParams();
   useEffect(() => {
@@ -24,10 +28,10 @@ export default function JoinGame() {
     <>
       <div>JoinGame </div>
       <div>
-        id: {socket.id} room:{state.roomId}
+        id: {socket ? socket.id : "no socket ID"} room:{state.roomId}
       </div>
       <h2> {" " + playerName}</h2>
-      {socket.id ? (
+      {socket?.id ? (
         <>
           <TextInputForm
             label={"playerName"}
